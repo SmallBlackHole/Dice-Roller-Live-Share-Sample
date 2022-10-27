@@ -1,0 +1,18 @@
+{
+    "$schema": "https://aka.ms/teamsfx-env-config-schema",
+    "description": "You can customize the TeamsFx config for different environments. Visit https://aka.ms/teamsfx-env-config to learn more about this.",
+    "manifest": {
+        "appName": {
+            "short": "DiceRollerLiveShare",
+            "full": "Full name for DiceRollerLiveShare"
+        },
+        "description": {
+            "short": "Short description of DiceRollerLiveShare",
+            "full": "Full description of DiceRollerLiveShare"
+        },
+        "icons": {
+            "color": "resources/color.png",
+            "outline": "resources/outline.png"
+        }
+    }
+}
