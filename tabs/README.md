@@ -1,69 +1,58 @@
-# How to use this Teams Tab app HelloWorld app
+# Dice Roller - Live Share sample
 
-Microsoft Teams supports the ability to run web-based UI inside "custom tabs" that users can install either for just themselves (personal tabs) or within a team or group chat context. Please be advised that mgt-teamsfx-provider library in this app is currently in preview stage, please expect breaking changes in the future release.
+This repository contains a simple app that enables all connected clients to roll a dice and view the result. For a
+walkthrough of this example and how it works, check out the [tutorial documentation](https://aka.ms/fluid/tutorial).
 
-## Prerequisites
+## Requirements
 
-- [NodeJS](https://nodejs.org/en/)
-- An M365 account. If you do not have M365 account, apply one from [M365 developer program](https://developer.microsoft.com/en-us/microsoft-365/dev-program)
-- [Teams Toolkit Visual Studio Code Extension](https://aka.ms/teams-toolkit) version after 4.0.0 or [TeamsFx CLI](https://aka.ms/teamsfx-cli)
+Node 12.17+
 
-## Debug
+## Getting Started
 
-- From Visual Studio Code: Start debugging the project by hitting the `F5` key in Visual Studio Code. 
-- Alternatively use the `Run and Debug Activity Panel` in Visual Studio Code and click the `Run and Debug` green arrow button.
-- From TeamsFx CLI: Start debugging the project by executing the command `teamsfx preview --local` in your project directory.
+After cloning the repository, install dependencies and start the application
 
-## Edit the manifest
+```bash
+npm install
+npm start
+```
 
-You can find the Teams app manifest in `templates/appPackage` folder. The folder contains one manifest file:
-* `manifest.template.json`: Manifest file for Teams app running locally or running remotely (After deployed to Azure).
+## Testing the app in Teams
 
-This file contains template arguments with `{...}` statements which will be replaced at build time. You may add any extra properties or permissions you require to this file. See the [schema reference](https://docs.microsoft.com/en-us/microsoftteams/platform/resources/schema/manifest-schema) for more information.
+### Create a ngrok tunnel to allow Teams to reach your tab app
 
-## Deploy to Azure
+1. [Download ngrok](https://ngrok.com/download).
+2. Launch ngrok with port 8080.
+   `ngrok http 8080 --host-header=localhost`
 
-Deploy your project to Azure by following these steps:
+### Create the app package to sideload into Teams
 
-| From Visual Studio Code                                                                                                                                                                                                                                                                                                                                                  | From TeamsFx CLI                                                                                                                                                                                                                    |
-| :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| <ul><li>Open Teams Toolkit, and sign into Azure by clicking the `Sign in to Azure` under the `ACCOUNTS` section from sidebar.</li> <li>After you signed in, select a subscription under your account.</li><li>Open the Teams Toolkit and click `Provision in the cloud` from DEVELOPMENT section or open the command palette and select: `Teams: Provision in the cloud`.</li><li>Open the Teams Toolkit and click `Deploy to the cloud` or open the command palette and select: `Teams: Deploy to the cloud`.</li></ul> | <ul> <li>Run command `teamsfx account login azure`.</li> <li>Run command `teamsfx account set --subscription <your-subscription-id>`.</li> <li> Run command `teamsfx provision`.</li> <li>Run command: `teamsfx deploy`. </li></ul> |
+1. Open `.\manifest\manifest.json` and update values in it, including your [Application ID](https://learn.microsoft.com/microsoftteams/platform/resources/schema/manifest-schema#id.
+2. You must replace `https://<<BASE_URI_DOMAIN>>` with the https path to your ngrok tunnel.
+3. It is recommended that you also update the following fields.
+    - Set `developer.name` to your name.
+    - Update `developer.websiteUrl` with your website.
+    - Update `developer.privacyUrl` with your privacy policy.
+    - Update `developer.termsOfUseUrl` with your terms of use.
+4. Create a zip file with the contents of `.\manifest` directory so that manifest.json, color.png, and outline.png are in the root directory of the zip file.
+    - On Windows or Mac, select all files in `.\manifest` directory and compress them.
+    - Give your zip file a descriptive name, e.g. `DiceRollerLiveShare`.
 
-> Note: Provisioning and deployment may incur charges to your Azure Subscription.
+### Test it out
 
-## Preview
+1. Schedule a meeting for testing from calendar in Teams.
+2. Join the meeting.
+3. In the meeting window, tap on **+ Apps** and tap on **Manage apps** in the flyout that opens.
+4. In the **Manage apps** pane, tap on **Upload a custom app**.
+    - _Don't see the option to **Upload a custom app?!** Follow [instructions here](https://docs.microsoft.com/en-us/microsoftteams/teams-custom-app-policies-and-settings) to enable custom-apps in your tenant._
+5. Select the zip file you created earlier and upload it.
+6. In the dialog that shows up, tap **Add** to add your sample app into the meeting.
+7. Now, back in the meeting window, tap **+ Apps** again and type the name of your app in the _Find an app_ textbox.
+8. Select the app to activate it in the meeting.
+9. In the configuration dialog, just tap **Save** to add your app into the meeting.
+10. In the side panel, tap the share icon to put your app on the main stage in the meeting.
 
-Once the provisioning and deployment steps are finished, you can preview your app:
+<img width="216" alt="image" src="https://user-images.githubusercontent.com/7799064/168399675-73e67154-bdde-4d0f-bb8c-bc62aef00e66.png">
 
-- From Visual Studio Code
-
-  1. Open the `Run and Debug Activity Panel`.
-  1. Select `Launch Remote (Edge)` or `Launch Remote (Chrome)` from the launch configuration drop-down.
-  1. Press the Play (green arrow) button to launch your app - now running remotely from Azure.
-
-- From TeamsFx CLI: execute `teamsfx preview --remote` in your project directory to launch your application.
-
-## Validate manifest file
-
-To check that your manifest file is valid:
-
-- From Visual Studio Code: open the command palette and select: `Teams: Validate manifest file`.
-- From TeamsFx CLI: run command `teamsfx validate` in your project directory.
-
-## Package
-
-- From Visual Studio Code: open the Teams Toolkit and click `Zip Teams metadata package` or open the command palette and select `Teams: Zip Teams metadata package`.
-- Alternatively, from the command line run `teamsfx package` in the project directory.
-
-## Publish to Teams
-
-Once deployed, you may want to distribute your application to your organization's internal app store in Teams. Your app will be submitted for admin approval.
-
-- From Visual Studio Code: open the Teams Toolkit and click `Publish to Teams` or open the command palette and select: `Teams: Publish to Teams`.
-- From TeamsFx CLI: run command `teamsfx publish` in your project directory.
-
-## Add Single Sign On feature
-
-Microsoft Teams provides a mechanism by which an application can obtain the signed-in Teams user token to access Microsoft Graph (and other APIs). Teams Toolkit facilitates this interaction by abstracting some of the Azure Active Directory (AAD) flows and integrations behind some simple, high-level APIs. This enables you to add single sign-on (SSO) features easily to your Teams application.
-
-Please follow this [document](https://aka.ms/teamsfx-add-sso) to add single sign on for your project.
+11. That's it! You should now see dice-roller on the meeting stage.
+    ![image](https://user-images.githubusercontent.com/7799064/168399633-be29ec2b-55db-49ad-a90d-a1011baa8eaa.png)
+12. Your friends/colleagues invited to the meeting should be able to see your app on stage when they join the meeting.

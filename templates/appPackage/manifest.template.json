@@ -27,22 +27,14 @@
     "composeExtensions": [],
     "configurableTabs": [
         {
-            "configurationUrl": "{{{state.fx-resource-frontend-hosting.endpoint}}}{{{state.fx-resource-frontend-hosting.indexPath}}}/config",
-            "canUpdateConfiguration": true,
+            "configurationUrl": "{{{state.fx-resource-frontend-hosting.endpoint}}}/?view=config&inTeams=1&load=1",
+            "canUpdateConfiguration": false,
             "scopes": [
-                "team",
                 "groupchat"
-            ]
-        }
-    ],
-    "staticTabs": [
-        {
-            "entityId": "index0",
-            "name": "Personal Tab",
-            "contentUrl": "{{{state.fx-resource-frontend-hosting.endpoint}}}{{{state.fx-resource-frontend-hosting.indexPath}}}/tab",
-            "websiteUrl": "{{{state.fx-resource-frontend-hosting.endpoint}}}{{{state.fx-resource-frontend-hosting.indexPath}}}/tab",
-            "scopes": [
-                "personal"
+            ],
+            "context": [
+                "meetingSidePanel",
+                "meetingStage"
             ]
         }
     ],
@@ -52,5 +44,28 @@
     ],
     "validDomains": [
         "{{state.fx-resource-frontend-hosting.domain}}"
-    ]
+    ],
+    "authorization": {
+        "permissions": {
+            "orgWide": [],
+            "resourceSpecific": [
+                {
+                    "name": "MeetingStage.Write.Chat",
+                    "type": "Delegated"
+                },
+                {
+                    "name": "ChannelMeetingStage.Write.Group",
+                    "type": "Delegated"
+                },
+                {
+                    "name": "LiveShareSession.ReadWrite.Chat",
+                    "type": "Delegated"
+                },
+                {
+                    "name": "LiveShareSession.ReadWrite.Group",
+                    "type": "Delegated"
+                }
+            ]
+        }
+    }
 }
